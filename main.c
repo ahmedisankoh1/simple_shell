@@ -9,7 +9,7 @@ int main(int arc, char *env[])
 {
 	(void)arc;
 	char *prompt = "££ ", *buffer = NULL, *delim = " \n", *parts, *new_buffer;
-	char *arr[] = {NULL, NULL, NULL};
+	char *arr[] = {NULL, NULL, NULL, NULL};
 	int i = 0, j = 0, status, num_tok;
 	size_t n;
 	ssize_t num;
@@ -18,7 +18,8 @@ int main(int arc, char *env[])
 	
 	while (1)
 	{
-		_print(prompt);
+		if(isatty(0))
+			_print(prompt);
 
 		num = getline(&buffer, &n, stdin);
 		if (num == EOF)
@@ -34,9 +35,11 @@ int main(int arc, char *env[])
 		}
 
 		parts = strtok(buffer, delim);
-		arr[j] = parts;
+		arr[0] = parts;
 		parts = strtok(NULL, delim);
 		arr[1] = parts;
+		parts = strtok(NULL, delim);
+		arr[2] = parts;
 
 		child = fork();
 
