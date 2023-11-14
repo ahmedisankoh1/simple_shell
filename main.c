@@ -5,34 +5,38 @@
  *
  * Return: returns 0 or -1
  */
-int main(int arc, char *arv[] __attribute__((unused)), char *env[])
+int main(int arc, char *env[])
 {
-	char *prompt = "££ ", *buffer = NULL, *delim = " \n";
-	char *arr[15];
-	int i = 0, j = 0, status;
+	(void)arc;
+	char *prompt = "££ ", *buffer = NULL, *delim = " \n", *parts, *new_buffer;
+	char *arr[] = {NULL, NULL, NULL};
+	int i = 0, j = 0, status, num_tok;
 	size_t n;
+	ssize_t num;
 	pid_t child;
 
-	
 	
 	while (1)
 	{
 		_print(prompt);
 
-		if (getline(&buffer, &n, stdin) == EOF)
+		num = getline(&buffer, &n, stdin);
+		if (num == EOF)
 		{
 			_print("\n");
 			exit(0);
 		}
-		
-		arr[i] = strtok(buffer, delim);
-		/*
-		while (arr[i])
+		while (buffer[i])
 		{
+			if (buffer[i] == '\n')
+				buffer[i] = 0;
 			++i;
-			arr[i] = strtok(NULL, delim);
 		}
-		*/
+
+		parts = strtok(buffer, delim);
+		arr[j] = parts;
+		parts = strtok(NULL, delim);
+		arr[1] = parts;
 
 		child = fork();
 
@@ -55,6 +59,7 @@ int main(int arc, char *arv[] __attribute__((unused)), char *env[])
 		{
 			wait(&status);
 		}
+
 
 	}
 	free(buffer);
