@@ -9,8 +9,8 @@ int main(int arc, char *env[])
 {
 	(void)arc;
 	char *prompt = "££ ", *buffer = NULL, *delim = " \n", *parts, *new_buffer;
-	char *arr[] = {NULL, NULL, NULL, NULL};
-	int i = 0, j = 0, status, num_tok;
+	char *arr[9];
+	int i, j, status, num_tok;
 	size_t n;
 	ssize_t num;
 	pid_t child;
@@ -27,6 +27,7 @@ int main(int arc, char *env[])
 			_print("\n");
 			exit(0);
 		}
+		i = 0;
 		while (buffer[i])
 		{
 			if (buffer[i] == '\n')
@@ -34,12 +35,13 @@ int main(int arc, char *env[])
 			++i;
 		}
 
-		parts = strtok(buffer, delim);
-		arr[0] = parts;
-		parts = strtok(NULL, delim);
-		arr[1] = parts;
-		parts = strtok(NULL, delim);
-		arr[2] = parts;
+		arr[j] = strtok(buffer, delim);
+		j = 0;
+		while (arr[j] != NULL)
+		{
+			++j;
+			arr[j] = strtok(NULL, delim);
+		}
 
 		child = fork();
 
