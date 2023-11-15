@@ -1,50 +1,30 @@
 #include "shell.h"
-
 /**
- * main - entry point
- *
+ * main - entry point to my shell
+ * @ac: this is the argument count
+ * @env: this is the environment
  * Return: returns 0 or -1
  */
-int main(int arc, char *env[])
+int main(int ac __attribute__((unused)), char *env[])
 {
-	(void)arc;
-	char *prompt = "££ ", *buffer = NULL, *delim = " \n", *parts, *new_buffer;
-	char *arr[9];
-	int i, j, status, num_tok;
+	char *prompt = "££ ", *buffer = NULL, *delim = " \n";
+	int status;
+	char *arr[15];
 	size_t n;
-	ssize_t num;
 	pid_t child;
 
-	
 	while (1)
 	{
-		if(isatty(0))
+		if (isatty(0))
 			_print(prompt);
-
-		num = getline(&buffer, &n, stdin);
-		if (num == EOF)
+		if (getline(&buffer, &n, stdin) == EOF)
 		{
 			_print("\n");
 			exit(0);
 		}
-		i = 0;
-		while (buffer[i])
-		{
-			if (buffer[i] == '\n')
-				buffer[i] = 0;
-			++i;
-		}
-
-		arr[j] = strtok(buffer, delim);
-		j = 0;
-		while (arr[j] != NULL)
-		{
-			++j;
-			arr[j] = strtok(NULL, delim);
-		}
-
+		rm_newline(buffer);
+		tokenise(buffer, arr, delim);
 		child = fork();
-
 		if (child == -1)
 		{
 			perror("forking faild\n");
@@ -59,15 +39,9 @@ int main(int arc, char *env[])
 				exit(0);
 			}
 		}
-
 		else
-		{
 			wait(&status);
-		}
-
-
 	}
 	free(buffer);
-
 	return (0);
 }
