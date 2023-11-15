@@ -8,7 +8,7 @@
  */
 int main(int ac __attribute__((unused)), char *argv[], char *env[])
 {
-	char *prompt = "££ ", *buffer = NULL;
+	char *prompt = "#cisfun$ ", *buffer = NULL;
 	int status;
 	char *arr[2];
 	size_t n;
