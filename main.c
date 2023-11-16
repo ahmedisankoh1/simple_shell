@@ -8,7 +8,7 @@
  */
 int main(int ac __attribute__((unused)), char *argv[], char *env[])
 {
-	char *prompt = "#cisfun$ ", *buffer = NULL;
+	char *prompt = "#cisfun$ ", *buffer = NULL, *delim = " \n";
 	int status;
 	char *arr[2];
 	size_t n;
@@ -16,7 +16,7 @@ int main(int ac __attribute__((unused)), char *argv[], char *env[])
 
 	while (1)
 	{
-		if (isatty(0))
+		if (isatty(STDIN_FILENO))
 			_print(prompt);
 		if (getline(&buffer, &n, stdin) == EOF)
 		{
@@ -24,15 +24,13 @@ int main(int ac __attribute__((unused)), char *argv[], char *env[])
 			exit(0);
 		}
 		rm_newline(buffer);
-		arr[0] = buffer;
-		arr[1] = NULL;
+		tokenise(buffer, arr, delim);
 		child = fork();
 		if (child == -1)
 		{
 			perror("forking faild\n");
 			exit(0);
 		}
-
 		else if (child == 0)
 		{
 			if (execve(arr[0], arr, env) == -1)
