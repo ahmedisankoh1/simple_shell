@@ -8,9 +8,9 @@
  */
 int main(int ac __attribute__((unused)), char *argv[], char *env[])
 {
-	char *prompt = "#cisfun$ ", *buffer = NULL;
+	char *prompt = "#cisfun$ ", *buffer = NULL, *delim = " \n";
 	int status;
-	char *arr[2];
+	char *arr[15];
 	size_t n;
 	pid_t child;
 
@@ -24,8 +24,7 @@ int main(int ac __attribute__((unused)), char *argv[], char *env[])
 			exit(0);
 		}
 		rm_newline(buffer);
-		arr[0] = buffer;
-		arr[1] = NULL;
+		tokenise(buffer, arr, delim);
 		child = fork();
 		if (child == -1)
 		{
